@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#666"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="560" fill="#f7f9fc"/>
+  <text x="480" y="36" text-anchor="middle" font-size="22" font-weight="bold" fill="#1a1a1a">AWS Disaster Recovery — Pilot Light Architecture</text>
+
+  <!-- Route 53 -->
+  <rect x="400" y="60" width="160" height="56" rx="10" fill="#ff9900"/>
+  <text x="480" y="85" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff">Route 53</text>
+  <text x="480" y="105" text-anchor="middle" font-size="12" fill="#fff">Health checks + failover routing</text>
+
+  <!-- Primary region -->
+  <rect x="30" y="140" width="430" height="390" rx="12" fill="#eaf2ff" stroke="#2f7fe5" stroke-width="2"/>
+  <text x="245" y="168" text-anchor="middle" font-size="16" font-weight="bold" fill="#2f7fe5">Primary — ap-southeast-1</text>
+
+  <rect x="60" y="190" width="170" height="70" rx="8" fill="#ffffff" stroke="#999"/>
+  <text x="145" y="215" text-anchor="middle" font-size="13" font-weight="bold">ALB</text>
+  <text x="145" y="235" text-anchor="middle" font-size="11" fill="#555">+ EC2 / ECS app tier</text>
+
+  <rect x="260" y="190" width="170" height="70" rx="8" fill="#ffffff" stroke="#999"/>
+  <text x="345" y="215" text-anchor="middle" font-size="13" font-weight="bold">RDS Primary</text>
+  <text x="345" y="235" text-anchor="middle" font-size="11" fill="#555">PostgreSQL / MySQL</text>
+
+  <rect x="60" y="285" width="170" height="70" rx="8" fill="#ffffff" stroke="#999"/>
+  <text x="145" y="310" text-anchor="middle" font-size="13" font-weight="bold">S3 Bucket</text>
+  <text x="145" y="330" text-anchor="middle" font-size="11" fill="#555">versioning enabled</text>
+
+  <rect x="260" y="285" width="170" height="70" rx="8" fill="#ffffff" stroke="#999"/>
+  <text x="345" y="310" text-anchor="middle" font-size="13" font-weight="bold">Backups</text>
+  <text x="345" y="330" text-anchor="middle" font-size="11" fill="#555">snapshots + AWS Backup</text>
+
+  <rect x="60" y="380" width="370" height="70" rx="8" fill="#ffffff" stroke="#999"/>
+  <text x="245" y="405" text-anchor="middle" font-size="13" font-weight="bold">Infrastructure as Code</text>
+  <text x="245" y="425" text-anchor="middle" font-size="11" fill="#555">same Terraform modules for both regions</text>
+
+  <!-- DR region -->
+  <rect x="500" y="140" width="430" height="390" rx="12" fill="#fff4e8" stroke="#e07b00" stroke-width="2"/>
+  <text x="715" y="168" text-anchor="middle" font-size="16" font-weight="bold" fill="#e07b00">DR Region — ap-southeast-3</text>
+
+  <rect x="530" y="190" width="170" height="70" rx="8" fill="#ffffff" stroke="#999"/>
+  <text x="615" y="215" text-anchor="middle" font-size="13" font-weight="bold">RDS Read Replica</text>
+  <text x="615" y="235" text-anchor="middle" font-size="11" fill="#555">promote on failover</text>
+
+  <rect x="730" y="190" width="170" height="70" rx="8" fill="#ffffff" stroke="#999"/>
+  <text x="815" y="215" text-anchor="middle" font-size="13" font-weight="bold">S3 Replica</text>
+  <text x="815" y="235" text-anchor="middle" font-size="11" fill="#555">cross-region replication</text>
+
+  <rect x="530" y="285" width="170" height="70" rx="8" fill="#ffffff" stroke="#999"/>
+  <text x="615" y="310" text-anchor="middle" font-size="13" font-weight="bold">App (standby)</text>
+  <text x="615" y="330" text-anchor="middle" font-size="11" fill="#555">AMIs / images pre-baked</text>
+
+  <rect x="730" y="285" width="170" height="70" rx="8" fill="#ffffff" stroke="#999"/>
+  <text x="815" y="310" text-anchor="middle" font-size="13" font-weight="bold">terraform apply</text>
+  <text x="815" y="330" text-anchor="middle" font-size="11" fill="#555">recreate on failover</text>
+
+  <rect x="530" y="380" width="370" height="70" rx="8" fill="#e07b00"/>
+  <text x="715" y="408" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">On failover: promote RDS → deploy app → flip DNS</text>
+  <text x="715" y="430" text-anchor="middle" font-size="12" fill="#fff">target RTO ≈ 10 min · RPO ≈ minutes</text>
+
+  <!-- Arrows -->
+  <line x1="480" y1="116" x2="245" y2="190" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="480" y1="116" x2="715" y2="190" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="430" y1="225" x2="530" y2="225" stroke="#e07b00" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
+  <text x="480" y="215" text-anchor="middle" font-size="11" fill="#e07b00">async replication</text>
+  <line x1="230" y1="320" x2="730" y2="320" stroke="#e07b00" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
+  <text x="480" y="310" text-anchor="middle" font-size="11" fill="#e07b00">cross-region replication</text>
+</svg>
